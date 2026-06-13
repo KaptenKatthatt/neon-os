@@ -1,6 +1,7 @@
 import { useEffect, useState, type JSX } from 'react';
 import { useOsStore } from '../state/osStore';
 import { APP_REGISTRY } from '../apps/registry';
+import { Icon } from './Icon';
 
 const formatTime = (d: Date): string =>
   d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -55,9 +56,7 @@ const useBattery = (): { level: number | null; charging: boolean | null } => {
         b.addEventListener('levelchange', update);
         b.addEventListener('chargingchange', update);
       })
-      .catch(() => {
-        // ignore
-      });
+      .catch(() => undefined);
     return (): void => {
       cancelled = true;
     };
@@ -95,10 +94,6 @@ export const Taskbar = (): JSX.Element => {
 
   const online = useOnline();
   const battery = useBattery();
-  const batteryLabel =
-    battery.level === null
-      ? '—'
-      : `${battery.level}%${battery.charging ? ' ?' : ''}`;
 
   return (
     <div className="taskbar" role="toolbar" aria-label="Taskbar">
@@ -110,7 +105,7 @@ export const Taskbar = (): JSX.Element => {
         aria-expanded={startOpen}
         title="Start"
       >
-        <span aria-hidden>?</span>
+        <Icon name="start" size={16} title="" />
         <span>Start</span>
       </button>
 
@@ -132,7 +127,7 @@ export const Taskbar = (): JSX.Element => {
                 }
               }}
             >
-              <span aria-hidden>{def?.icon ?? '?'}</span>
+              <Icon name={def?.iconName ?? 'globe'} size={14} />
               <span>{w.title}</span>
             </button>
           );
@@ -146,10 +141,12 @@ export const Taskbar = (): JSX.Element => {
         title="Open settings"
         aria-label="Open settings"
       >
-        <span className="dot" aria-hidden style={{ background: online ? 'var(--neon-green)' : 'var(--neon-red)' }} />
+        <Icon name={online ? 'tray-online' : 'tray-offline'} size={12} />
         <span className="label" style={{ marginRight: 6 }}>{online ? 'Online' : 'Offline'}</span>
         {battery.level !== null && (
-          <span className="label" style={{ marginLeft: 6 }}>?? {batteryLabel}</span>
+          <span className="label" style={{ marginLeft: 6 }}>
+            <Icon name="battery" size={12} /> {battery.level}%{battery.charging ? ' ?' : ''}
+          </span>
         )}
       </button>
 

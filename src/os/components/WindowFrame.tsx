@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type JSX, type Pointer
 import type { AppWindow } from '../types';
 import { useOsStore } from '../state/osStore';
 import { APP_REGISTRY } from '../apps/registry';
+import { Icon } from './Icon';
 
 interface Props {
   readonly win: AppWindow;
@@ -108,7 +109,9 @@ export const WindowFrame = ({ win }: Props): JSX.Element | null => {
         onDoubleClick={() => toggleMax(win.id)}
       >
         <div className="title">
-          <span className="icon" aria-hidden>{def?.icon ?? '?'}</span>
+          <span className="icon" aria-hidden>
+            <Icon name={def?.iconName ?? 'globe'} size={14} />
+          </span>
           <span>{win.title}</span>
         </div>
         <div className="controls">
@@ -121,7 +124,7 @@ export const WindowFrame = ({ win }: Props): JSX.Element | null => {
               minimize(win.id);
             }}
           >
-            -
+            <Icon name="minimize" size={12} />
           </button>
           <button
             type="button"
@@ -132,7 +135,7 @@ export const WindowFrame = ({ win }: Props): JSX.Element | null => {
               toggleMax(win.id);
             }}
           >
-            {win.maximized ? '?' : '?'}
+            <Icon name={win.maximized ? 'restore' : 'maximize'} size={12} />
           </button>
           <button
             type="button"
@@ -144,7 +147,7 @@ export const WindowFrame = ({ win }: Props): JSX.Element | null => {
               close(win.id);
             }}
           >
-            ?
+            <Icon name="close" size={12} />
           </button>
         </div>
       </div>

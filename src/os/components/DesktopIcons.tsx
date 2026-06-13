@@ -1,6 +1,7 @@
 import type { JSX } from 'react';
 import { useOsStore } from '../state/osStore';
 import { APP_REGISTRY } from '../apps/registry';
+import { Icon } from './Icon';
 import type { AppId } from '../types';
 
 interface QuickApp {
@@ -38,7 +39,9 @@ export const DesktopIcons = (): JSX.Element => {
             }}
             title={`Open ${def.name}`}
           >
-            <span className="glyph" aria-hidden>{def.icon}</span>
+            <span className="glyph" aria-hidden>
+              <Icon name={def.iconName} size={28} />
+            </span>
             <span className="label">{q.label}</span>
           </button>
         );

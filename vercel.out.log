@@ -1,0 +1,41 @@
+﻿node.exe : Vercel CLI 54.13.0 (Node.js 24.14.1)
+At line:2 char:74
++ ... s\vercel\dist\vc.js"; & node $vercel deploy --prod --yes 2>&1 | Out-S ...
++                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Vercel CLI 54.13.0 (Node.js 24.14.1):String) [], Remot 
+   eException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Retrieving project…
+Deploying jonas-olsons-projects/neon-os
+Uploading [--------------------] (0.0B/455B)
+Uploading [====================] (455.0B/455B)
+  Inspect     https://vercel.com/jonas-olsons-projects/neon-os/6QA7hDbHs8i4oib6C78Lv8dTXQC6
+▲ Production  https://neon-nkqb4zs1g-jonas-olsons-projects.vercel.app
+Building…
+Building…
+[2K[1A[2K[G▲ Production  https://neon-nkqb4zs1g-jonas-olsons-projects.vercel.app
+Completing…
+▲ Aliased     https://neon-os.vercel.app
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_6QA7hDbHs8i4oib6C78Lv8dTXQC6",
+    "url": "https://neon-nkqb4zs1g-jonas-olsons-projects.vercel.app",
+    "inspectorUrl": "https://vercel.com/jonas-olsons-projects/neon-os/6QA7hDbHs8i4oib6C78Lv8dTXQC6",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_6QA7hDbHs8i4oib6C78Lv8dTXQC6"
+  },
+  "message": "Deployment neon-nkqb4zs1g-jonas-olsons-projects.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel inspect neon-nkqb4zs1g-jonas-olsons-projects.vercel.app",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod",
+      "when": "Promote to production"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent, type JSX } from 'react';
 import type { AppHostProps } from './registry';
+import { Icon } from '../components/Icon';
 
 interface Article {
   readonly id: string;
@@ -27,7 +28,7 @@ const HOME: Article = {
   paragraphs: [
     'Welcome to Neon Browser, the offline companion app that ships with Neon OS. It demonstrates a fully working address bar, back/forward navigation, bookmarks, and rendered articles.',
     'The browser is intentionally sandboxed: it can only render built-in articles and Wikipedia-style pages stored locally in the OS. There is no network or remote iframe support.',
-    'Use the address bar to go to a built-in page like `wiki:neon` or `about:blank`, or click a link in any article to navigate to a related page.',
+    'Use the address bar to go to a built-in page like `wiki:neon` or `neon://home`, or click a link in any article to navigate to a related page.',
   ],
   links: [
     { label: 'Neon OS', to: 'wiki:neon' },
@@ -45,7 +46,7 @@ const WIKI: ReadonlyArray<Article> = [
     url: 'wiki:neon',
     lede: 'Neon OS is a tiny browser-based desktop environment.',
     summary:
-      'Neon OS is a demo desktop environment that runs entirely inside a web browser. It provides a start menu, taskbar, window manager, and a small set of built-in applications: Notepad, Paint, Calculator, Terminal, Files, and a sandboxed Browser.',
+      'Neon OS is a demo desktop environment that runs entirely inside a web browser. It provides a start menu, taskbar, window manager, and a small set of built-in applications: Notepad, Paint, Calculator, Terminal, Files, Browser, Settings, and System Monitor.',
     headings: [
       { id: 'overview', text: 'Overview' },
       { id: 'apps', text: 'Applications' },
@@ -53,7 +54,7 @@ const WIKI: ReadonlyArray<Article> = [
     ],
     paragraphs: [
       'Neon OS is implemented in React, TypeScript, and Vite. It uses Zustand for state management and ships with a window manager that supports moving, resizing, minimizing, and maximizing windows.',
-      'The file system is virtual and lives entirely in memory. It includes a small starting set of files: Welcome.txt, README.md, palette.cfg, Quick Notes.txt, and a logo image.',
+      'The file system is virtual and lives in memory + localStorage. It includes a small starting set of files: Welcome.txt, README.md, palette.cfg, Quick Notes.txt, and a logo image.',
       'The Terminal supports a small set of commands: `help`, `ls`, `cd`, `pwd`, `cat`, `write`, `mkdir`, `rm`, `open`, `date`, `echo`, `clear`, and `about`.',
     ],
     links: [
@@ -253,7 +254,7 @@ export const BrowserApp = (_props: AppHostProps): JSX.Element => {
   const canFwd = idx < stack.length - 1;
 
   const bookmarkItems = useMemo<ReadonlyArray<{ label: string; to: string }>>(() => ([
-    { label: '?? Home', to: 'neon://home' },
+    { label: 'Home', to: 'neon://home' },
     { label: 'Wikipedia', to: 'wiki:wikipedia' },
     { label: 'Neon OS', to: 'wiki:neon' },
     { label: 'TypeScript', to: 'wiki:typescript' },
@@ -264,9 +265,15 @@ export const BrowserApp = (_props: AppHostProps): JSX.Element => {
   return (
     <div className="browser">
       <div className="bar">
-        <button type="button" onClick={goBack} disabled={!canBack} title="Back" aria-label="Back">?</button>
-        <button type="button" onClick={goForward} disabled={!canFwd} title="Forward" aria-label="Forward">?</button>
-        <button type="button" onClick={reload} title="Reload" aria-label="Reload">?</button>
+        <button type="button" onClick={goBack} disabled={!canBack} title="Back" aria-label="Back">
+          <Icon name="chevron-left" size={14} />
+        </button>
+        <button type="button" onClick={goForward} disabled={!canFwd} title="Forward" aria-label="Forward">
+          <Icon name="chevron-right" size={14} />
+        </button>
+        <button type="button" onClick={reload} title="Reload" aria-label="Reload">
+          <Icon name="refresh" size={14} />
+        </button>
         <form onSubmit={onSubmit} style={{ display: 'flex', flex: 1 }} role="search">
           <input
             value={url}

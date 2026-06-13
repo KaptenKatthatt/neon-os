@@ -1,6 +1,7 @@
 import { useMemo, useState, type JSX } from 'react';
 import { useOsStore } from '../state/osStore';
 import { APP_REGISTRY } from '../apps/registry';
+import { Icon } from './Icon';
 import type { AppId } from '../types';
 
 export const StartMenu = (): JSX.Element | null => {
@@ -9,8 +10,8 @@ export const StartMenu = (): JSX.Element | null => {
   const setStartMenu = useOsStore((s) => s.setStartMenu);
   const [query, setQuery] = useState<string>('');
 
-  const tiles = useMemo<ReadonlyArray<{ id: AppId; name: string; icon: string }>>(() => {
-    const all = Object.values(APP_REGISTRY).map((a) => ({ id: a.id, name: a.name, icon: a.icon }));
+  const tiles = useMemo<ReadonlyArray<{ id: AppId; name: string; iconName: import('./Icon').IconName }>>(() => {
+    const all = Object.values(APP_REGISTRY).map((a) => ({ id: a.id, name: a.name, iconName: a.iconName }));
     if (!query.trim()) return all;
     const q = query.toLowerCase();
     return all.filter((a) => a.name.toLowerCase().includes(q));
@@ -20,13 +21,16 @@ export const StartMenu = (): JSX.Element | null => {
 
   return (
     <div className="start-menu" role="menu" aria-label="Start menu">
-      <input
-        className="search"
-        placeholder="Search apps..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        autoFocus
-      />
+      <div className="search-row">
+        <Icon name="search" size={14} />
+        <input
+          className="search"
+          placeholder="Search apps..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          autoFocus
+        />
+      </div>
       <div className="section-label">Apps</div>
       <div className="apps">
         {tiles.map((t) => (
@@ -40,7 +44,9 @@ export const StartMenu = (): JSX.Element | null => {
               setStartMenu(false);
             }}
           >
-            <span className="glyph" aria-hidden>{t.icon}</span>
+            <span className="glyph" aria-hidden>
+              <Icon name={t.iconName} size={22} />
+            </span>
             <span>{t.name}</span>
           </button>
         ))}
@@ -58,7 +64,7 @@ export const StartMenu = (): JSX.Element | null => {
             setStartMenu(false);
           }}
         >
-          Settings
+          <Icon name="settings" size={12} /> <span>Settings</span>
         </button>
         <button
           type="button"
@@ -67,7 +73,7 @@ export const StartMenu = (): JSX.Element | null => {
             setStartMenu(false);
           }}
         >
-          About
+          <Icon name="info" size={12} /> <span>About</span>
         </button>
       </div>
     </div>

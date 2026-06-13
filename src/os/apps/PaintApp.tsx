@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type JSX, type PointerEvent as ReactPointerEvent } from 'react';
 import type { AppHostProps } from './registry';
+import { Icon, type IconName } from '../components/Icon';
 
 type Tool = 'pen' | 'eraser' | 'rect' | 'circle' | 'line';
 
@@ -15,6 +16,14 @@ const COLORS: ReadonlyArray<string> = [
   '#8b5cf6',
   '#ec4899',
 ];
+
+const TOOL_ICONS: Readonly<Record<Tool, IconName>> = {
+  pen: 'paint-brush',
+  eraser: 'paint-eraser',
+  line: 'paint-line',
+  rect: 'paint-rect',
+  circle: 'paint-circle',
+};
 
 export const PaintApp = (_props: AppHostProps): JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -142,7 +151,7 @@ export const PaintApp = (_props: AppHostProps): JSX.Element => {
               onClick={() => setTool(t)}
               title={t}
             >
-              {t === 'pen' ? '?' : t === 'eraser' ? '?' : t === 'line' ? '/' : t === 'rect' ? '?' : '?'}
+              <Icon name={TOOL_ICONS[t]} size={14} />
             </button>
           ))}
         </div>
@@ -176,7 +185,9 @@ export const PaintApp = (_props: AppHostProps): JSX.Element => {
         </div>
         <div className="group">
           <button type="button" onClick={clear} title="Clear">Clear</button>
-          <button type="button" onClick={fillAll} title="Fill with current color">Fill</button>
+          <button type="button" onClick={fillAll} title="Fill with current color">
+            <Icon name="paint-bucket" size={12} /> Fill
+          </button>
           <button type="button" onClick={exportPng} title="Export PNG">Export</button>
         </div>
       </div>

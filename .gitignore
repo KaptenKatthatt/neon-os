@@ -13,3 +13,4 @@ dist-ssr
 *.sw?
 dev.log
 .vercel
+.vercel

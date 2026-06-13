@@ -1,5 +1,6 @@
 import { useMemo, useState, type JSX } from 'react';
 import { useOsStore } from '../state/osStore';
+import { Icon, type IconName } from '../components/Icon';
 import type { AppHostProps } from './registry';
 import type { FsNode, FileKind } from '../types';
 
@@ -8,19 +9,19 @@ const buildQuick = (
   docsId: string,
   picsId: string,
   projectsId: string,
-): ReadonlyArray<{ id: string; label: string; icon: string }> => [
-  { id: rootId, label: 'NeonDrive', icon: '??' },
-  { id: docsId, label: 'Documents', icon: '??' },
-  { id: picsId, label: 'Pictures', icon: '???' },
-  { id: projectsId, label: 'Projects', icon: '??' },
+): ReadonlyArray<{ id: string; label: string; iconName: IconName }> => [
+  { id: rootId, label: 'NeonDrive', iconName: 'memory' },
+  { id: docsId, label: 'Documents', iconName: 'folder' },
+  { id: picsId, label: 'Pictures', iconName: 'file-image' },
+  { id: projectsId, label: 'Projects', iconName: 'folder' },
 ];
 
-const glyphFor = (node: FsNode): string => {
-  if (node.kind === 'folder') return '??';
-  if (node.kind === 'image') return '???';
-  if (node.kind === 'config') return '??';
-  if (node.kind === 'app') return '??';
-  return '??';
+const glyphFor = (node: FsNode): IconName => {
+  if (node.kind === 'folder') return 'folder';
+  if (node.kind === 'image') return 'file-image';
+  if (node.kind === 'config') return 'file-config';
+  if (node.kind === 'app') return 'file-app';
+  return 'file-text';
 };
 
 const formatBytes = (n: number): string => {
@@ -54,10 +55,10 @@ export const FilesApp = (_props: AppHostProps): JSX.Element => {
     const chain: string[] = [];
     let cur: string | null = cwd.id;
     while (cur) {
-      const nodeHere: FsNode | undefined = fs.nodes[cur];
-      if (!nodeHere) break;
-      chain.unshift(nodeHere.name);
-      cur = nodeHere.parentId;
+      const nodeCur: FsNode | undefined = fs.nodes[cur];
+      if (!nodeCur) break;
+      chain.unshift(nodeCur.name);
+      cur = nodeCur.parentId;
     }
     if (chain[0] === fs.nodes[rootId]?.name) chain.shift();
     return '/' + chain.join('/');
@@ -102,7 +103,7 @@ export const FilesApp = (_props: AppHostProps): JSX.Element => {
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter') setCwdId(q.id); }}
           >
-            <span aria-hidden>{q.icon}</span>
+            <Icon name={q.iconName} size={14} />
             <span>{q.label}</span>
           </div>
         ))}
@@ -113,9 +114,15 @@ export const FilesApp = (_props: AppHostProps): JSX.Element => {
       </aside>
       <main className="main">
         <div className="toolbar">
-          <button type="button" onClick={goUp} disabled={!cwd?.parentId} title="Up">? Up</button>
-          <button type="button" onClick={newTextFile}>+ File</button>
-          <button type="button" onClick={newFolder}>+ Folder</button>
+          <button type="button" onClick={goUp} disabled={!cwd?.parentId} title="Up">
+            <Icon name="arrow-up" size={12} /> Up
+          </button>
+          <button type="button" onClick={newTextFile}>
+            <Icon name="plus" size={12} /> File
+          </button>
+          <button type="button" onClick={newFolder}>
+            <Icon name="folder" size={12} /> Folder
+          </button>
           <span className="path">{path}</span>
         </div>
         <div className="grid">
@@ -133,11 +140,13 @@ export const FilesApp = (_props: AppHostProps): JSX.Element => {
                 role="button"
                 tabIndex={0}
               >
-                <span className="glyph" aria-hidden>{glyphFor(n)}</span>
+                <span className="glyph" aria-hidden>
+                  <Icon name={glyphFor(n)} size={22} />
+                </span>
                 <div className="name" title={n.name}>{n.name}</div>
                 <div className="meta">
                   {kind}
-                  {n.kind !== 'folder' ? ` · ${formatBytes(n.size)}` : ''}
+                  {n.kind !== 'folder' ? ` ï¿½ ${formatBytes(n.size)}` : ''}
                 </div>
                 <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
                   <button

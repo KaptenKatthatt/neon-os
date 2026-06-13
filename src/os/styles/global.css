@@ -284,6 +284,32 @@ select {
   }
 }
 
+.start-menu .search-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--neon-border);
+  border-radius: 8px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+.start-menu .search-row:focus-within {
+  border-color: var(--neon-accent);
+}
+.start-menu .search-row .search {
+  width: 100%;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--neon-text);
+  outline: none;
+  margin: 0;
+}
+.start-menu .search-row .search:focus {
+  border: none;
+}
 .start-menu .search {
   width: 100%;
   height: 32px;

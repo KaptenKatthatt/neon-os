@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type JSX } from 'react';
 import { useOsStore } from '../state/osStore';
+import { Icon } from '../components/Icon';
 import type { AppHostProps } from './registry';
 
 export const NotepadApp = (_props: AppHostProps): JSX.Element => {
@@ -51,13 +52,15 @@ export const NotepadApp = (_props: AppHostProps): JSX.Element => {
             </option>
           ))}
         </select>
-        <button type="button" onClick={newFile} title="New file">+ New</button>
+        <button type="button" onClick={newFile} title="New file">
+          <Icon name="plus" size={12} /> New
+        </button>
         <button
           type="button"
           onClick={() => openApp('files')}
           title="Browse files"
         >
-          Browse
+          <Icon name="folder" size={12} /> Browse
         </button>
         <input value={file?.name ?? ''} readOnly aria-label="File name" />
       </div>
